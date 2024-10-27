@@ -1,0 +1,384 @@
+about:
+  date: October 27, 2024 10:17:54
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 13
+  number_tables: 12
+info_toggle_checked: true
+resources:
+  Admin:
+    attributes:
+    - label: ' username*'
+      name: username
+      required: true
+      search: true
+      sort: true
+    - name: email
+      required: true
+    - name: id
+    description: Represents administrators who have special privileges to oversee
+      communication and manage users.
+    info_list: Represents administrators who have special privileges to oversee communication
+      and manage users.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - admin_id
+      name: AdminLogList
+      resource: AdminLog
+    - direction: tomany
+      fks:
+      - reporter_id
+      name: UserReportList
+      resource: UserReport
+    type: Admin
+    user_key: username
+  AdminLog:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: admin_id
+      required: true
+    - name: action
+      required: true
+    - name: timestamp
+    description: Tracks actions performed by admins for audit and accountability purposes.
+    info_list: Tracks actions performed by admins for audit and accountability purposes.
+    tab_groups:
+    - direction: toone
+      fks:
+      - admin_id
+      name: admin
+      resource: Admin
+    type: AdminLog
+    user_key: id
+  Group:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: created_at
+    - name: id
+    description: Represents a group in which multiple users can participate and communicate
+      with each other.
+    info_list: Represents a group in which multiple users can participate and communicate
+      with each other.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - group_id
+      name: GroupMemberList
+      resource: GroupMember
+    - direction: tomany
+      fks:
+      - group_id
+      name: GroupMessageList
+      resource: GroupMessage
+    type: Group
+    user_key: name
+  GroupMember:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: group_id
+      required: true
+    - name: user_id
+      required: true
+    - name: join_date
+    description: Joins users with groups they are part of, managing membership information.
+    info_list: Joins users with groups they are part of, managing membership information.
+    tab_groups:
+    - direction: toone
+      fks:
+      - group_id
+      name: group
+      resource: Group
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: GroupMember
+    user_key: id
+  GroupMessage:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: group_id
+      required: true
+    - name: sender_id
+      required: true
+    - name: content
+      required: true
+    - name: timestamp
+    description: Stores messages that are sent in groups, linked to the group and
+      the sending user.
+    info_list: Stores messages that are sent in groups, linked to the group and the
+      sending user.
+    tab_groups:
+    - direction: toone
+      fks:
+      - group_id
+      name: group
+      resource: Group
+    - direction: toone
+      fks:
+      - sender_id
+      name: sender
+      resource: User
+    type: GroupMessage
+    user_key: id
+  Message:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: receiver_id
+      required: true
+    - name: sender_id
+      required: true
+    - name: content
+      required: true
+    - name: timestamp
+    description: Stores information about messages sent by and to users. Each message
+      is linked to a specific user.
+    info_list: Stores information about messages sent by and to users. Each message
+      is linked to a specific user.
+    tab_groups:
+    - direction: toone
+      fks:
+      - receiver_id
+      name: receiver
+      resource: User
+    - direction: toone
+      fks:
+      - sender_id
+      name: sender
+      resource: User
+    type: Message
+    user_key: id
+  Notification:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: user_id
+      required: true
+    - name: message
+      required: true
+    - name: created_at
+    - name: is_read
+    description: Represents notifications that alert users about various events and
+      communications.
+    info_list: Represents notifications that alert users about various events and
+      communications.
+    tab_groups:
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: Notification
+    user_key: id
+  User:
+    attributes:
+    - label: ' username*'
+      name: username
+      required: true
+      search: true
+      sort: true
+    - name: email
+      required: true
+    - name: id
+    - name: is_blocked
+    description: Represents an end user in the system. Users can send and receive
+      messages and have an account status for administrative actions.
+    info_list: Represents an end user in the system. Users can send and receive messages
+      and have an account status for administrative actions.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - user_id
+      name: GroupMemberList
+      resource: GroupMember
+    - direction: tomany
+      fks:
+      - sender_id
+      name: GroupMessageList
+      resource: GroupMessage
+    - direction: tomany
+      fks:
+      - receiver_id
+      name: MessageList
+      resource: Message
+    - direction: tomany
+      fks:
+      - sender_id
+      name: senderMessageList
+      resource: Message
+    - direction: tomany
+      fks:
+      - user_id
+      name: NotificationList
+      resource: Notification
+    - direction: tomany
+      fks:
+      - user_id
+      name: UserActivityList
+      resource: UserActivity
+    - direction: tomany
+      fks:
+      - user_id
+      name: UserFeedbackList
+      resource: UserFeedback
+    - direction: tomany
+      fks:
+      - user_id
+      name: UserReportList
+      resource: UserReport
+    - direction: tomany
+      fks:
+      - user_id
+      name: UserSettingList
+      resource: UserSetting
+    type: User
+    user_key: username
+  UserActivity:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: user_id
+      required: true
+    - name: activity_type
+      required: true
+    - name: timestamp
+    description: Logs user activity for monitoring and behavior analysis purposes.
+    info_list: Logs user activity for monitoring and behavior analysis purposes.
+    tab_groups:
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: UserActivity
+    user_key: id
+  UserFeedback:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: user_id
+      required: true
+    - name: feedback_text
+      required: true
+    - name: submitted_at
+    description: Collects feedback from users regarding their experience and system
+      improvement suggestions.
+    info_list: Collects feedback from users regarding their experience and system
+      improvement suggestions.
+    tab_groups:
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: UserFeedback
+    user_key: id
+  UserReport:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: reporter_id
+      required: true
+    - name: user_id
+      required: true
+    - name: report_content
+      required: true
+    - name: created_at
+    description: Contains reports generated by admins regarding suspicious or problematic
+      user behavior.
+    info_list: Contains reports generated by admins regarding suspicious or problematic
+      user behavior.
+    tab_groups:
+    - direction: toone
+      fks:
+      - reporter_id
+      name: reporter
+      resource: Admin
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: UserReport
+    user_key: id
+  UserSetting:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: user_id
+      required: true
+    - name: email_notifications
+    - name: profile_visibility
+    description: Stores customizable settings for users such as notifications preferences
+      and privacy settings.
+    info_list: Stores customizable settings for users such as notifications preferences
+      and privacy settings.
+    tab_groups:
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: UserSetting
+    user_key: id
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'

@@ -1,0 +1,44 @@
+<o-form-layout-manager attr="AdminLog" mode="tab" title="ADMINLOG">
+    <div fxFill fxLayout="column" fxLayoutAlign="start">
+        <o-table 
+            attr="AdminLogTable" 
+            service="AdminLog" 
+            entity="AdminLog" 
+            title="ADMINLOG"
+            keys="id"
+            columns="id;admin_id;action;timestamp" 
+            header-actions="R;D"
+            visible-columns="id;admin_id;action;timestamp"  
+            sort-columns="id" 
+            query-rows="20" 
+            quick-filter="yes"
+            row-height="medium" 
+            select-all-checkbox="true" 
+            pageable="yes"  
+            auto-adjust="true" 
+            virtual-scroll="yes" 
+            edition-mode="dblclick"
+            horizontal-scroll="yes"
+            show-title="yes"
+            export-button="yes">
+            
+            <o-table-column #id attr="id" title=" id*" type="integer" editable="no" required="no" content-align="center"></o-table-column>
+            
+            <o-table-column attr="admin_id" title="admin_id">
+    <o-table-cell-renderer-service attr="admin_id" 
+        service="Admin" entity="AdminType" columns="id;username"
+        parent-keys="id:admin_id"
+        value-column="username" keys="admin_id"
+        visible-columns="username" separator=" - " width="680px">
+    </o-table-cell-renderer-service>
+</o-table-column>
+            
+            <o-table-column #action attr="action" title="action" editable="no" required="yes" content-align="left"></o-table-column>
+            
+            <o-date-input #timestamp attr="timestamp" type="date" label="timestamp" enabled="yes" required="no" format="LL" fxFlex="20%" class="form-field"></o-date-input>
+            
+            <o-table-context-menu></o-table-context-menu>
+            <o-table-paginator page-size-options="24;48;96"></o-table-paginator>
+        </o-table>
+    </div>
+</o-form-layout-manager>

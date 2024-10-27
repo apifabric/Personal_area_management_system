@@ -1,0 +1,562 @@
+about:
+  date: October 27, 2024 10:17:54
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+entities:
+  Admin:
+    columns:
+    - label: ' username*'
+      name: username
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: email
+      required: true
+      template: text
+      type: VARCHAR
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Represents administrators who have special privileges to oversee
+      communication and manage users.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: username
+    home_template: home_template.html
+    info_list: Represents administrators who have special privileges to oversee communication
+      and manage users.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - admin_id
+      name: AdminLogList
+      resource: AdminLog
+    - direction: tomany
+      fks:
+      - reporter_id
+      name: UserReportList
+      resource: UserReport
+    type: Admin
+  AdminLog:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: admin_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: action
+      required: true
+      template: text
+      type: TEXT
+    - name: timestamp
+      template: date
+      type: DATETIME
+    description: Tracks actions performed by admins for audit and accountability purposes.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Tracks actions performed by admins for audit and accountability purposes.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - admin_id
+      name: admin
+      resource: Admin
+    type: AdminLog
+  Group:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: created_at
+      template: date
+      type: DATETIME
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Represents a group in which multiple users can participate and communicate
+      with each other.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Represents a group in which multiple users can participate and communicate
+      with each other.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - group_id
+      name: GroupMemberList
+      resource: GroupMember
+    - direction: tomany
+      fks:
+      - group_id
+      name: GroupMessageList
+      resource: GroupMessage
+    type: Group
+  GroupMember:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: group_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: user_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: join_date
+      template: date
+      type: DATETIME
+    description: Joins users with groups they are part of, managing membership information.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Joins users with groups they are part of, managing membership information.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - group_id
+      name: group
+      resource: Group
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: GroupMember
+  GroupMessage:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: group_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: sender_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: content
+      required: true
+      template: text
+      type: TEXT
+    - name: timestamp
+      template: date
+      type: DATETIME
+    description: Stores messages that are sent in groups, linked to the group and
+      the sending user.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Stores messages that are sent in groups, linked to the group and the
+      sending user.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - group_id
+      name: group
+      resource: Group
+    - direction: toone
+      fks:
+      - sender_id
+      name: sender
+      resource: User
+    type: GroupMessage
+  Message:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: receiver_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: sender_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: content
+      required: true
+      template: text
+      type: TEXT
+    - name: timestamp
+      template: date
+      type: DATETIME
+    description: Stores information about messages sent by and to users. Each message
+      is linked to a specific user.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Stores information about messages sent by and to users. Each message
+      is linked to a specific user.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - receiver_id
+      name: receiver
+      resource: User
+    - direction: toone
+      fks:
+      - sender_id
+      name: sender
+      resource: User
+    type: Message
+  Notification:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: user_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: message
+      required: true
+      template: text
+      type: TEXT
+    - name: created_at
+      template: date
+      type: DATETIME
+    - name: is_read
+      template: text
+      type: BOOLEAN
+    description: Represents notifications that alert users about various events and
+      communications.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Represents notifications that alert users about various events and
+      communications.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: Notification
+  User:
+    columns:
+    - label: ' username*'
+      name: username
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: email
+      required: true
+      template: text
+      type: VARCHAR
+    - name: id
+      template: integer
+      type: INTEGER
+    - name: is_blocked
+      template: text
+      type: BOOLEAN
+    description: Represents an end user in the system. Users can send and receive
+      messages and have an account status for administrative actions.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: username
+    home_template: home_template.html
+    info_list: Represents an end user in the system. Users can send and receive messages
+      and have an account status for administrative actions.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - user_id
+      name: GroupMemberList
+      resource: GroupMember
+    - direction: tomany
+      fks:
+      - sender_id
+      name: GroupMessageList
+      resource: GroupMessage
+    - direction: tomany
+      fks:
+      - receiver_id
+      name: MessageList
+      resource: Message
+    - direction: tomany
+      fks:
+      - sender_id
+      name: senderMessageList
+      resource: Message
+    - direction: tomany
+      fks:
+      - user_id
+      name: NotificationList
+      resource: Notification
+    - direction: tomany
+      fks:
+      - user_id
+      name: UserActivityList
+      resource: UserActivity
+    - direction: tomany
+      fks:
+      - user_id
+      name: UserFeedbackList
+      resource: UserFeedback
+    - direction: tomany
+      fks:
+      - user_id
+      name: UserReportList
+      resource: UserReport
+    - direction: tomany
+      fks:
+      - user_id
+      name: UserSettingList
+      resource: UserSetting
+    type: User
+  UserActivity:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: user_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: activity_type
+      required: true
+      template: text
+      type: VARCHAR
+    - name: timestamp
+      template: date
+      type: DATETIME
+    description: Logs user activity for monitoring and behavior analysis purposes.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Logs user activity for monitoring and behavior analysis purposes.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: UserActivity
+  UserFeedback:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: user_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: feedback_text
+      required: true
+      template: text
+      type: TEXT
+    - name: submitted_at
+      template: date
+      type: DATETIME
+    description: Collects feedback from users regarding their experience and system
+      improvement suggestions.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Collects feedback from users regarding their experience and system
+      improvement suggestions.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: UserFeedback
+  UserReport:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: reporter_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: user_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: report_content
+      required: true
+      template: text
+      type: TEXT
+    - name: created_at
+      template: date
+      type: DATETIME
+    description: Contains reports generated by admins regarding suspicious or problematic
+      user behavior.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Contains reports generated by admins regarding suspicious or problematic
+      user behavior.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - reporter_id
+      name: reporter
+      resource: Admin
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: UserReport
+  UserSetting:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: user_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: email_notifications
+      template: text
+      type: BOOLEAN
+    - name: profile_visibility
+      template: text
+      type: BOOLEAN
+    description: Stores customizable settings for users such as notifications preferences
+      and privacy settings.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Stores customizable settings for users such as notifications preferences
+      and privacy settings.
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - user_id
+      name: user
+      resource: User
+    type: UserSetting
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    edit_on_mode: dblclick
+    include_translation: false
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    mode: tab
+    pick_style: list
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: false

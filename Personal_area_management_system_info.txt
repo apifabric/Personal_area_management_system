@@ -1,0 +1,3 @@
+I need a personal area that manages all communications with end users.
+It should allow each user to see all his messages and read any of them.
+It should also allow an admin to see aggregated user information and perform administrative tasks such as blocking a user.

@@ -1,0 +1,105 @@
+// Copy this text, paste to https://dbdiagram.io/d
+// Or, https://databasediagram.com/app
+
+Table Admin {
+    id INTEGER [primary key]
+    username VARCHAR 
+    email VARCHAR 
+    }
+
+Table AdminLog {
+    id INTEGER [primary key]
+    admin_id INTEGER 
+    action TEXT 
+    timestamp DATETIME 
+    }
+
+Table Group {
+    id INTEGER [primary key]
+    name VARCHAR 
+    created_at DATETIME 
+    }
+
+Table GroupMember {
+    id INTEGER [primary key]
+    user_id INTEGER 
+    group_id INTEGER 
+    join_date DATETIME 
+    }
+
+Table User {
+    id INTEGER [primary key]
+    username VARCHAR 
+    email VARCHAR 
+    is_blocked BOOLEAN 
+    }
+
+Table GroupMessage {
+    id INTEGER [primary key]
+    content TEXT 
+    timestamp DATETIME 
+    sender_id INTEGER 
+    group_id INTEGER 
+    }
+
+Table Message {
+    id INTEGER [primary key]
+    content TEXT 
+    timestamp DATETIME 
+    sender_id INTEGER 
+    receiver_id INTEGER 
+    }
+
+Table Notification {
+    id INTEGER [primary key]
+    user_id INTEGER 
+    message TEXT 
+    created_at DATETIME 
+    is_read BOOLEAN 
+    }
+
+Table UserActivity {
+    id INTEGER [primary key]
+    user_id INTEGER 
+    activity_type VARCHAR 
+    timestamp DATETIME 
+    }
+
+Table UserFeedback {
+    id INTEGER [primary key]
+    user_id INTEGER 
+    feedback_text TEXT 
+    submitted_at DATETIME 
+    }
+
+Table UserReport {
+    id INTEGER [primary key]
+    report_content TEXT 
+    created_at DATETIME 
+    reporter_id INTEGER 
+    user_id INTEGER 
+    }
+
+Table UserSetting {
+    id INTEGER [primary key]
+    user_id INTEGER 
+    email_notifications BOOLEAN 
+    profile_visibility BOOLEAN 
+    }
+
+
+
+// Relationships
+    Ref: AdminLog.(admin_id) < Admin.(id)
+    Ref: GroupMember.(group_id) < Group.(id)
+    Ref: GroupMember.(user_id) < User.(id)
+    Ref: GroupMessage.(group_id) < Group.(id)
+    Ref: GroupMessage.(sender_id) < User.(id)
+    Ref: Message.(receiver_id) < User.(id)
+    Ref: Message.(sender_id) < User.(id)
+    Ref: Notification.(user_id) < User.(id)
+    Ref: UserActivity.(user_id) < User.(id)
+    Ref: UserFeedback.(user_id) < User.(id)
+    Ref: UserReport.(reporter_id) < Admin.(id)
+    Ref: UserReport.(user_id) < User.(id)
+    Ref: UserSetting.(user_id) < User.(id)
